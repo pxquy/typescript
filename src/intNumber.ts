@@ -1,0 +1,18 @@
+"use strict";
+
+function isPrime(n: number): boolean {
+  if (n < 2) return false;
+  if (n === 2) return true;
+  if (n % 2 === 0) return false;
+
+  const sqrtN = Math.sqrt(n);
+  for (let i = 3; i <= sqrtN; i += 2) {
+    if (n % i === 0) return false;
+  }
+  return true;
+}
+
+console.log(isPrime(2));
+console.log(isPrime(17));
+console.log(isPrime(18));
+console.log(isPrime(1));
