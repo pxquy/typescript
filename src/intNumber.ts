@@ -12,7 +12,7 @@ function isPrime(n: number): boolean {
   return true;
 }
 
-console.log(isPrime(2));
-console.log(isPrime(17));
+console.log(isPrime(20));
+console.log(isPrime(15));
 console.log(isPrime(18));
-console.log(isPrime(1));
+console.log(isPrime(14));
