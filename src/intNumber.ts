@@ -9,6 +9,7 @@ function isPrime(n: number): boolean {
   }
 
   const sqrtN = Math.sqrt(n);
+
   for (let i = 3; i <= sqrtN; i += 2) {
     if (n % i === 0) return false;
   }
