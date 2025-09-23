@@ -6,3 +6,5 @@ const myCourses: { name: string; age: number } = {
   age: 23,
 };
 console.log(myCourses, array);
+
+let a: string | number = 1;

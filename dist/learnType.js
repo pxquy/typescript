@@ -5,3 +5,4 @@ const myCourses = {
     age: 23,
 };
 console.log(myCourses, array);
+let a = 1;
