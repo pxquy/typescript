@@ -15,3 +15,7 @@ const sumNumber = (...num) => {
     return num.reduce((acc, curr) => acc + curr, 0);
 };
 console.log(sumNumber(1, 2, 3));
+function sum3(name, callback) {
+    return callback(`Xin chào mọi người ${name}`);
+}
+console.log(sum3("Quý", (msg) => msg));
