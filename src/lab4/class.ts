@@ -130,4 +130,5 @@ const distance = 100;
 
 moTorBike.forEach((v) => {
   const time = calculateTravelTime(v, distance);
+  console.log(`${v.name} đi ${distance} km mất khoảng ${time.toFixed(2)} giờ`);
 });
