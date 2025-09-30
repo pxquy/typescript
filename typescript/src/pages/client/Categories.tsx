@@ -1,16 +1,25 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Categories = () => {
   const [active, setActive] = useState("/");
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (keyword.trim() !== "") {
+      navigate(`/?name_like=${keyword}`);
+    } else {
+      navigate("/products");
+    }
+  };
+
   return (
     <nav className="bg-red-500 flex w-full items-center gap-5 justify-between">
       <div>
         <ul className="flex w-full items-center p-5 pl-35 gap-5">
           <li
-            onClick={() => {
-              setActive("/");
-            }}
+            onClick={() => setActive("/")}
             className={`p-2 rounded cursor-pointer ${
               active === "/" ? "bg-blue-400 text-white" : "bg-blue-100"
             }`}
@@ -41,13 +50,18 @@ const Categories = () => {
           </li>
         </ul>
       </div>
-      <div className="w-110">
+      <div className="w-110 flex items-center gap-2 pr-4">
         <input
           type="text"
           placeholder="Tìm kiếm sản phẩm..."
-          className="bg-white rounded w-65 focus:outline-none"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          className="bg-white rounded px-2 py-1 w-65 focus:outline-none"
         />
-        <button className="bg-blue-500 cursor-pointer w-10 rounded hover:bg-blue-600">
+        <button
+          onClick={handleSearch}
+          className="bg-blue-500 text-white cursor-pointer px-3 py-1 rounded hover:bg-blue-600"
+        >
           👌🏼
         </button>
       </div>
