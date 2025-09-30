@@ -12,7 +12,7 @@ interface ProductDetail {
 }
 const ProductDetail = () => {
   const [product, setProduct] = useState<ProductDetail>({
-    id: 1,
+    id: 0,
     name: "",
     price: 0,
     image: "",
