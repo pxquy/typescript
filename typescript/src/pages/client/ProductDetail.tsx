@@ -44,8 +44,8 @@ const ProductDetail = () => {
           <div className="flex items-center gap-30 justify-center">
             <div className="w-150">
               <img
-                className="w-full h-150"
-                src={`${product?.image}`}
+                className="w-full h-150 object-cover"
+                src={`../images/${product?.image}`}
                 alt={`${product.name}`}
               />
             </div>

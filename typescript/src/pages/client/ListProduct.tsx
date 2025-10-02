@@ -46,7 +46,11 @@ const ListProduct = () => {
             className="w-70 shadow-sm hover:scale-105 duration-200 ease-in-out"
           >
             <div className="w-full h-65 flex items-center justify-center">
-              <img className="w-65 h-60 rounded" src={p.image} alt={p.name} />
+              <img
+                className="w-65 h-60 rounded object-cover"
+                src={`./images/${p.image}`}
+                alt={p.name}
+              />
             </div>
             <div className="w-full text-black font-bold text-left p-2 pl-3">
               {p.name}
