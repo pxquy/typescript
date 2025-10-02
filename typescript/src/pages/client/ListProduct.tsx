@@ -13,13 +13,15 @@ const ListProduct = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("name_like") || "";
+  const [page, setPage] = useState<number>(1);
+  const limit = 8;
 
   useEffect(() => {
     const renderProduct = async () => {
       try {
-        let url = `http://localhost:3000/products?_page=1&_limit=8`;
+        let url = `http://localhost:3000/products?_page=${page}&_limit=${limit}`;
         if (keyword) {
-          url = `http://localhost:3000/products?name_like=${keyword}`;
+          url = `http://localhost:3000/products?name_like=${keyword}&_page=${page}&_limit=${limit}`;
         }
         const { data } = await axios.get(url);
         setProducts(data);
@@ -28,7 +30,17 @@ const ListProduct = () => {
       }
     };
     renderProduct();
-  }, [keyword]);
+  }, [keyword, page]);
+
+  const prev = document.getElementById("prev");
+
+  const handelPage = () => {
+    if (products.length > 0) {
+      setPage(page + 1);
+    } else if (products.length == 0) {
+      prev?.ariaDisabled;
+    }
+  };
 
   return (
     <>
@@ -68,6 +80,25 @@ const ListProduct = () => {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* Nút phân trang */}
+      <div className="flex justify-center gap-3 mt-6">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+          className="px-3 py-1 border rounded disabled:opacity-50"
+        >
+          Trang trước
+        </button>
+        <span className="px-3 py-1">Trang {page}</span>
+        <button
+          id="prev"
+          onClick={handelPage}
+          className="px-3 py-1 border rounded"
+        >
+          Trang sau
+        </button>
       </div>
     </>
   );
