@@ -6,6 +6,7 @@ import Products from "./pages/client/Products";
 import News from "./pages/client/News";
 import ProductDetail from "./pages/client/ProductDetail";
 import ColorButton from "./bai6/ColorButton";
+import MySate from "./MyState/MySate";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/news" element={<News />} />
         </Route>
         <Route path="colorButton" element={<ColorButton />} />
+        <Route path="mySate" element={<MySate />} />
       </Routes>
     </>
   );
