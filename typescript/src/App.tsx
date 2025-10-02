@@ -5,7 +5,7 @@ import Layout from "./layout/client/Layout";
 import Products from "./pages/client/Products";
 import News from "./pages/client/News";
 import ProductDetail from "./pages/client/ProductDetail";
-import Bai6 from "./pages/bai6/bai6";
+import ColorButton from "./bai6/colorButton";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route path="/productDetail/:id" element={<ProductDetail />} />
           <Route path="/news" element={<News />} />
         </Route>
-        <Route path="bai6" element={<Bai6 />} />
+        <Route path="colorButton" element={<ColorButton />} />
       </Routes>
     </>
   );
