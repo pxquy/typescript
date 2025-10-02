@@ -82,7 +82,6 @@ const ListProduct = () => {
         ))}
       </div>
 
-      {/* Nút phân trang */}
       <div className="flex justify-center gap-3 mt-6">
         <button
           disabled={page === 1}
