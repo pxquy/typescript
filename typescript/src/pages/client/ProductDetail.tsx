@@ -42,9 +42,9 @@ const ProductDetail = () => {
       <div className="m-10">
         {product && (
           <div className="flex items-center gap-30 justify-center">
-            <div className="w-150">
+            <div className="w-150 h-150 shadow-sm">
               <img
-                className="w-full h-150 object-cover"
+                className="w-full h-120 object-cover mt-12"
                 src={`../images/${product?.image}`}
                 alt={`${product.name}`}
               />
