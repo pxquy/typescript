@@ -5,7 +5,7 @@ import Layout from "./layout/client/Layout";
 import Products from "./pages/client/Products";
 import News from "./pages/client/News";
 import ProductDetail from "./pages/client/ProductDetail";
-import ColorButton from "./bai6/colorButton";
+import ColorButton from "./bai6/ColorButton";
 
 function App() {
   return (

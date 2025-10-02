@@ -1,8 +1,7 @@
-// component/Button.tsx
 interface ButtonProps {
-  label: string; // Text hiển thị
-  color: string; // Class màu nền (Tailwind)
-  onClick: () => void; // Hành động khi click
+  label: string;
+  color: string;
+  onClick: () => void;
 }
 
 const Button = ({ label, color, onClick }: ButtonProps) => {

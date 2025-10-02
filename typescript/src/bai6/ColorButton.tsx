@@ -1,4 +1,3 @@
-// pages/Bai6.tsx
 import { useState } from "react";
 import Button from "../component/ClickColor";
 import { randomColor } from "../component/RanDomColor";
@@ -10,7 +9,6 @@ const ColorButton = () => {
 
   return (
     <div className="flex gap-4 p-6">
-      {/* Nút 1: đỏ ↔ xanh lá */}
       <Button
         label="Nút 1"
         color={color1}
@@ -21,7 +19,6 @@ const ColorButton = () => {
         }
       />
 
-      {/* Nút 2: xanh ↔ vàng */}
       <Button
         label="Nút 2"
         color={color2}
@@ -32,7 +29,6 @@ const ColorButton = () => {
         }
       />
 
-      {/* Nút 3: random */}
       <Button
         label="Nút 3 (Random)"
         color={color3}
