@@ -7,6 +7,7 @@ import News from "./pages/client/News";
 import ProductDetail from "./pages/client/ProductDetail";
 import ColorButton from "./bai6/ColorButton";
 import MySate from "./MyState/MySate";
+import Bai8 from "./BAI8/Bai8";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         </Route>
         <Route path="colorButton" element={<ColorButton />} />
         <Route path="mySate" element={<MySate />} />
+        <Route path="myEffect" element={<Bai8 />} />
       </Routes>
     </>
   );
