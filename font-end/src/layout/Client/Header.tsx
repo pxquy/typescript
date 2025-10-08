@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../../assets/images/logoShop.jpg";
+// import logo from "./images/logoShop.jpg";
 import { useState } from "react";
 
 const Header = () => {
@@ -26,7 +26,7 @@ const Header = () => {
 
         <div className="flex items-center gap-2">
           <img
-            src={logo}
+            src="./images/logoShop.jpg"
             alt="Logo Shop"
             className="w-14 h-14 object-cover rounded-full border-2 border-amber-300 shadow-sm"
           />

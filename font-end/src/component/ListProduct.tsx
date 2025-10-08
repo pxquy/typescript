@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { data } from "react-router-dom";
 
 interface Products {
   name: string;
@@ -37,7 +36,11 @@ const ListProduct = () => {
             className="w-60 shadow-lg hover:scale-105 cursor-pointer"
           >
             <div>
-              <img src={p.images} alt={p.name} className="h-50" />
+              <img
+                src={`./images/${p.images}`}
+                alt={p.name}
+                className="h-50 w-full"
+              />
             </div>
             <div className="font-bold text-center p-2">{p.name}</div>
             <div className="flex items-center justify-center gap-10">

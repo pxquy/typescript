@@ -1,5 +1,4 @@
-import banner from "../../assets/public/banneShop.jpg";
-import ListProduct from "../../component/listProduct";
+import ListProduct from "../../component/ListProduct";
 
 const HomePage = () => {
   return (
@@ -7,7 +6,7 @@ const HomePage = () => {
       <div className="w-full items-center">
         <img
           className="w-350 h-150 object-cover ml-15 mt-5 rounded-md"
-          src={banner}
+          src="./images/bannerShop.jpg"
           alt="Banner Shop"
         />
       </div>
