@@ -33,7 +33,7 @@ const ListProduct = () => {
         products.map((p, index) => (
           <div
             key={index + 1}
-            className="w-60 shadow-lg hover:scale-105 cursor-pointer"
+            className="w-60 shadow-lg hover:scale-105 duration-200 ease-in-out cursor-pointer"
           >
             <div>
               <img

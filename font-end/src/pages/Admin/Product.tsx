@@ -50,13 +50,13 @@ const ProductManager = () => {
               placeholder="Tìm kiếm sản phẩm..."
               className="shadow-inner bg-gray-200 w-70 rounded-lg placeholder:p-2 focus:outline-none"
             />
-            <button className="bg-blue-400 w-20 rounded-lg font-bold text-white cursor-pointer">
+            <button className="bg-blue-400 w-20 rounded-lg font-bold text-white cursor-pointer hover:bg-blue-500">
               Lọc
             </button>
           </form>
         </div>
         <div>
-          <table className="border">
+          <table className="border rounded-lg">
             <thead>
               <tr className="bg-gray-200">
                 <th className="border-gray-300 border">
@@ -85,7 +85,9 @@ const ProductManager = () => {
                   <tr
                     key={index + 1}
                     className={`border border-gray-300 ${
-                      index % 2 == 0 ? "bg-white" : "bg-gray-200"
+                      index % 2 == 0
+                        ? "bg-white shadow-sm"
+                        : "bg-gray-100 shadow-inner"
                     }`}
                   >
                     <td className="border border-gray-300 w-10 text-center">
