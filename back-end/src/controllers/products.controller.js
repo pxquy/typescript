@@ -5,7 +5,7 @@ export const getAllProducts = async (req, res) => {
     const {
       _page = 1,
       _limit = 10,
-      _sort = price,
+      _sort = "price",
       _order = "desc",
       _search = "name",
       _keyword,

@@ -24,8 +24,11 @@ const ListCategories = () => {
         DANH MỤC
       </button>
       <ul className="absolute left-0 mt-0 w-50 bg-white shadow-lg rounded-md  opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity">
-        {categories.map((c) => (
-          <li className="px-4 py-2 hover:bg-amber-100 cursor-pointer">
+        {categories.map((c, index) => (
+          <li
+            key={index + 1}
+            className="px-4 py-2 hover:bg-amber-100 cursor-pointer"
+          >
             {c.name}
           </li>
         ))}

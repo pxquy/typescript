@@ -28,15 +28,19 @@ const ProductManager = () => {
     (async () => {
       try {
         let url = "";
-        if (keyword.trim() === "") {
+
+        if (keyword.trim() === "" && !minPrice && !maxPrice) {
           url = `http://localhost:3000/api/coffee?_page=${page}&_limit=${limit}`;
-        }
-        if (keyword) {
+        } else if (keyword && !minPrice && !maxPrice) {
           url = `http://localhost:3000/api/coffee?_search=name&_keyword=${keyword}&_page=${page}&_limit=${limit}`;
+        } else if (minPrice || maxPrice || keyword) {
+          url = `http://localhost:3000/api/coffee?_search=name&_keyword=${
+            keyword || ""
+          }&_sort=price&_minPrice=${minPrice || ""}&_maxPrice=${
+            maxPrice || ""
+          }&_page=${page}&_limit=${limit}`;
         }
-        if (minPrice || maxPrice || keyword) {
-          url = `http://localhost:3000/api/coffee?_search=name&_keyword=${keyword}&_sort=price&_minPrice=${minPrice}&_maxPrice=${maxPrice}$_page=${page}&_limi=${limit}`;
-        }
+
         const { data } = await axios.get(url);
         setProducts(data.data.docs);
         setTotalPages(data.data.totalPages);
