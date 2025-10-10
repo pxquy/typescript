@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-interface Products {
+interface Product {
   name: string;
   price: number;
   discountPrice: number;
@@ -10,121 +10,199 @@ interface Products {
   description: string;
 }
 
+interface Category {
+  name: string;
+}
+
 const ProductManager = () => {
-  const [Products, setProducts] = useState<Products[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [keyword, setKeyword] = useState<string>("");
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
+  const limit = 1;
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`http://localhost:3000/api/coffee`);
-      setProducts(data.data);
+      try {
+        let url = "";
+        if (keyword.trim() === "") {
+          url = `http://localhost:3000/api/coffee?_page=${page}&_limit=${limit}`;
+        }
+        if (keyword) {
+          url = `http://localhost:3000/api/coffee?_search=name&_keyword=${keyword}&_page=${page}&_limit=${limit}`;
+        }
+        if (minPrice || maxPrice || keyword) {
+          url = `http://localhost:3000/api/coffee?_search=name&_keyword=${keyword}&_sort=price&_minPrice=${minPrice}&_maxPrice=${maxPrice}$_page=${page}&_limi=${limit}`;
+        }
+        const { data } = await axios.get(url);
+        setProducts(data.data.docs);
+        setTotalPages(data.data.totalPages);
+      } catch (error) {
+        console.log("Lỗi dữ liệu sản phẩm", error);
+      }
+    })();
+  }, [page, keyword, minPrice, maxPrice]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:3000/api/categories`
+        );
+        setCategories(data.data);
+      } catch (error) {
+        console.log("Lỗi dữ liệu danh mục", error);
+      }
     })();
   }, []);
+
+  const generatePageNumbers = () => {
+    const pages: (number | string)[] = [];
+    if (totalPages <= 3) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else if (page <= 2) {
+      pages.push(1, 2, "...", totalPages);
+    } else if (page >= totalPages - 2) {
+      pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
+    } else {
+      pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
+    }
+    return pages;
+  };
+
   return (
     <>
       <div className="mt-15 ml-10">
         <div className="mb-10 z-10">
-          <form className="flex gap-20">
-            <select
-              name=""
-              id=""
-              className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer"
-            >
+          <form
+            className="flex gap-20"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setPage(1);
+            }}
+          >
+            <select className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer">
               <option value="" hidden>
                 Chọn danh mục
               </option>
-              <option value="">Danh mục 1</option>
-              <option value="">Danh mục 2</option>
-              <option value="">Danh mục 3</option>
+              {categories.length > 0 ? (
+                categories.map((c, index) => (
+                  <option key={index} value={c.name}>
+                    {c.name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Không có danh mục nào</option>
+              )}
             </select>
+
             <select
-              name=""
-              id=""
               className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer"
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "1") {
+                  setMinPrice("20000");
+                  setMaxPrice("50000");
+                } else if (value === "2") {
+                  setMinPrice("50000");
+                  setMaxPrice("100000");
+                } else {
+                  setMinPrice("");
+                  setMaxPrice("");
+                }
+                setPage(1);
+              }}
             >
-              <option value="">Chọn giá</option>
-              <option value="">20000-50000</option>
-              <option value="">50000-100000</option>
+              <option value="">Chọn khoảng giá</option>
+              <option value="1">20.000 - 50.000</option>
+              <option value="2">50.000 - 100.000</option>
             </select>
+
             <input
               type="text"
               placeholder="Tìm kiếm sản phẩm..."
-              className="shadow-inner bg-gray-200 w-70 rounded-lg placeholder:p-2 focus:outline-none"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="shadow-inner bg-gray-200 w-70 rounded-lg placeholder:p-2 focus:outline-none px-2"
             />
-            <button className="bg-blue-400 w-20 rounded-lg font-bold text-white cursor-pointer hover:bg-blue-500">
+            <button
+              type="submit"
+              className="bg-blue-400 w-20 rounded-lg font-bold text-white cursor-pointer hover:bg-blue-500"
+            >
               Lọc
             </button>
           </form>
         </div>
+
         <div>
-          <table className="border rounded-lg">
+          <table className="border rounded-lg w-full text-center">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border-gray-300 border">
-                  <input type="checkBox" />
+                <th className="border-gray-300 border p-2">
+                  <input type="checkbox" />
                 </th>
-                <th className="border border-gray-300 p-5">STT</th>
-                <th className="border border-gray-300 w-60 text-center">
-                  hình ảnh
-                </th>
-                <th className="border border-gray-300 w-60 text-center">
+                <th className="border border-gray-300 p-2">STT</th>
+                <th className="border border-gray-300 p-2 w-60">Hình ảnh</th>
+                <th className="border border-gray-300 p-2 w-60">
                   Giá sản phẩm
                 </th>
-                <th className="border border-gray-300 w-60 text-center">
-                  Giá giảm
-                </th>
-                <th className="border border-gray-300 w-60 text-center">
-                  Hành động
-                </th>
+                <th className="border border-gray-300 p-2 w-60">Giá giảm</th>
+                <th className="border border-gray-300 p-2 w-60">Hành động</th>
               </tr>
             </thead>
             <tbody>
-              {Products.length == 0 ? (
-                <div>Hiện tại không còn sản phẩm nào!</div>
+              {products.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-4 text-gray-500">
+                    Hiện tại không có sản phẩm nào!
+                  </td>
+                </tr>
               ) : (
-                Products.map((p, index) => (
+                products.map((p, index) => (
                   <tr
-                    key={index + 1}
+                    key={index}
                     className={`border border-gray-300 ${
-                      index % 2 == 0
+                      index % 2 === 0
                         ? "bg-white shadow-sm"
                         : "bg-gray-100 shadow-inner"
                     }`}
                   >
                     <td className="border border-gray-300 w-10 text-center">
-                      <input type="checkBox" />
+                      <input type="checkbox" />
                     </td>
                     <td className="border border-gray-300 w-10 text-center">
-                      {index + 1}
+                      {(page - 1) * limit + index + 1}
                     </td>
-                    <td className=" border-gray-300 w-80 p-2 flex justify-between">
+                    <td className="border-gray-300 w-80 p-2 flex justify-between items-center">
                       <img
                         src={`/images/${p.images}`}
                         alt={p.name}
                         className="w-20 h-20 rounded"
                       />
-                      <span className="mt-7 font-bold text-gray-500">
-                        {p.name}
-                      </span>
+                      <span className="font-bold text-gray-500">{p.name}</span>
                     </td>
                     <td className="border border-gray-300 w-65 text-center">
-                      {p.price}
+                      {p.price.toLocaleString()}₫
                     </td>
                     <td className="border border-gray-300 w-65 text-center">
-                      {p.discountPrice}
+                      {p.discountPrice.toLocaleString()}₫
                     </td>
-                    <td className=" border-gray-300 w-65 text-center justify-around">
-                      <button className="m-2 bg-red-600 pl-3 pr-3 pt-1 pb-1 rounded hover:bg-red-500 font-bold cursor-pointer">
+                    <td className="border-gray-300 w-65 text-center">
+                      <button className="m-2 bg-red-600 px-3 py-1 rounded hover:bg-red-500 font-bold cursor-pointer">
                         🗑️
                       </button>
                       <Link
                         to=""
-                        className="m-2 bg-yellow-400 pl-3 pr-3 pt-1 pb-1 rounded hover:bg-yellow-300 font-bold"
+                        className="m-2 bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-300 font-bold"
                       >
                         ✏️
                       </Link>
                       <Link
                         to=""
-                        className="m-2 bg-blue-600 pl-3 pr-3 pt-1 pb-1 rounded hover:bg-blue-500 font-bold"
+                        className="m-2 bg-blue-600 px-3 py-1 rounded hover:bg-blue-500 font-bold"
                       >
                         👁️
                       </Link>
@@ -134,6 +212,45 @@ const ProductManager = () => {
               )}
             </tbody>
           </table>
+
+          <div className="flex gap-5 m-10 items-center justify-center text-center w-250">
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="bg-blue-400 p-2 rounded-sm text-white hover:font-bold cursor-pointer disabled:opacity-50"
+            >
+              Trang trước
+            </button>
+
+            <div className="flex gap-2 items-center">
+              {generatePageNumbers().map((num, i) => (
+                <button
+                  key={i}
+                  disabled={num === "..."}
+                  onClick={() => typeof num === "number" && setPage(num)}
+                  className={`px-3 py-1 rounded ${
+                    num === page
+                      ? "bg-blue-600 text-white font-bold"
+                      : "bg-gray-200 text-gray-700"
+                  } ${
+                    num === "..."
+                      ? "cursor-default"
+                      : "cursor-pointer hover:bg-blue-400"
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
+
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+              className="bg-blue-400 p-2 rounded-sm text-white hover:font-bold cursor-pointer disabled:opacity-50"
+            >
+              Trang sau
+            </button>
+          </div>
         </div>
       </div>
     </>

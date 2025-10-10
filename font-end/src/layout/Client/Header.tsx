@@ -1,29 +1,14 @@
 import { Link } from "react-router-dom";
 // import logo from "./images/logoShop.jpg";
 import { useState } from "react";
+import ListCategories from "../../component/ListCategories";
 
 const Header = () => {
   const [active, setActive] = useState<string>("/");
   return (
     <header className="sticky top-0 bg-amber-100 shadow-md">
       <div className="flex items-center justify-evenly h-20 px-8">
-        <div className="relative group">
-          <button className="text-brown-800 font-semibold hover:text-white bg-yellow-500 p-3 rounded-sm transition cursor-pointer mr-45">
-            DANH MỤC
-          </button>
-          <ul className="absolute left-0 mt-0 w-40 bg-white shadow-lg rounded-md  opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity">
-            <li className="px-4 py-2 hover:bg-amber-100 cursor-pointer">
-              Danh mục 1
-            </li>
-            <li className="px-4 py-2 hover:bg-amber-100 cursor-pointer">
-              Danh mục 2
-            </li>
-            <li className="px-4 py-2 hover:bg-amber-100 cursor-pointer">
-              Danh mục 3
-            </li>
-          </ul>
-        </div>
-
+        <ListCategories />
         <div className="flex items-center gap-2">
           <img
             src="./images/logoShop.jpg"

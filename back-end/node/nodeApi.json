@@ -2,88 +2,179 @@
   "info": {
     "name": "Shop Coffee API",
     "_postman_id": "b5b8f2a3-d6a2-4f5f-ae52-bf7d8cddcb90",
-    "description": "Collection test toàn bộ API sản phẩm (Shop Coffee).",
+    "description": "Collection test toàn bộ API sản phẩm và danh mục (Shop Coffee).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Lấy danh sách tất cả sản phẩm",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/api/coffee",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["api", "coffee"]
-        }
-      }
-    },
-    {
-      "name": "Lấy chi tiết sản phẩm theo ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/api/coffee/{{productId}}",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["api", "coffee", "{{productId}}"]
-        }
-      }
-    },
-    {
-      "name": "Thêm mới sản phẩm",
-      "request": {
-        "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Cà phê sữa đá\",\n  \"price\": 35000,\n  \"discountPrice\": 30000,\n  \"image\": \"https://example.com/caphe-suada.jpg\",\n  \"description\": \"Cà phê sữa đá truyền thống Việt Nam\"\n}"
+      "name": "☕ PRODUCTS - Sản phẩm",
+      "item": [
+        {
+          "name": "Lấy danh sách tất cả sản phẩm",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/coffee",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee"]
+            }
+          }
         },
-        "url": {
-          "raw": "http://localhost:3000/api/coffee",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["api", "coffee"]
-        }
-      }
-    },
-    {
-      "name": "Cập nhật sản phẩm theo ID",
-      "request": {
-        "method": "PUT",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Cà phê đen đá\",\n  \"price\": 30000,\n  \"discountPrice\": 25000,\n  \"image\": \"https://example.com/caphe-den.jpg\",\n  \"description\": \"Cà phê đen đá nguyên chất\"\n}"
+        {
+          "name": "Lấy chi tiết sản phẩm theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/coffee/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee", "{{productId}}"]
+            }
+          }
         },
-        "url": {
-          "raw": "http://localhost:3000/api/coffee/{{productId}}",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["api", "coffee", "{{productId}}"]
+        {
+          "name": "Thêm mới sản phẩm",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê sữa đá\",\n  \"price\": 35000,\n  \"discountPrice\": 30000,\n  \"images\": \"https://example.com/caphe-suada.jpg\",\n  \"description\": \"Cà phê sữa đá truyền thống Việt Nam\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/coffee",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật sản phẩm theo ID",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê đen đá\",\n  \"price\": 30000,\n  \"discountPrice\": 25000,\n  \"images\": \"https://example.com/caphe-den.jpg\",\n  \"description\": \"Cà phê đen đá nguyên chất\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/coffee/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Xoá sản phẩm theo ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/coffee/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee", "{{productId}}"]
+            }
+          }
         }
-      }
+      ]
     },
     {
-      "name": "Xoá sản phẩm theo ID",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/api/coffee/{{productId}}",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["api", "coffee", "{{productId}}"]
+      "name": "📂 CATEGORIES - Danh mục",
+      "item": [
+        {
+          "name": "Lấy danh sách tất cả danh mục",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Lấy chi tiết danh mục theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories/{{categoryId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Thêm mới danh mục",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê truyền thống\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật danh mục theo ID",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê đặc biệt\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/categories/{{categoryId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Xoá danh mục theo ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories/{{categoryId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
         }
-      }
+      ]
     }
   ],
-  "variable": [{ "key": "productId", "value": "670f58a22ad5d53a0db8f47b" }]
+  "variable": [
+    { "key": "productId", "value": "670f58a22ad5d53a0db8f47b" },
+    { "key": "categoryId", "value": "6710f58a22ad5d53a0db8f47a" }
+  ]
 }

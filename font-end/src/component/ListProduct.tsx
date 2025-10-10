@@ -16,7 +16,7 @@ const ListProduct = () => {
     (async () => {
       try {
         const { data } = await axios.get(`http://localhost:3000/api/coffee`);
-        setProducts(data.data);
+        setProducts(data.data.docs);
       } catch (error) {
         console.log("Lỗi dữ liệu", error);
       }
@@ -37,7 +37,7 @@ const ListProduct = () => {
           >
             <div>
               <img
-                src={`./images/${p.images}`}
+                src={p.images ? `./images/${p.images}` : "./images/coffee1.jpg"}
                 alt={p.name}
                 className="h-50 w-full"
               />

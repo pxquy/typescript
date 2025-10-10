@@ -2,7 +2,41 @@ import Products from "../models/products.model";
 
 export const getAllProducts = async (req, res) => {
   try {
-    const getAllProducts = await Products.find();
+    const {
+      _page = 1,
+      _limit = 10,
+      _sort = price,
+      _order = "desc",
+      _search = "name",
+      _keyword,
+      _minPrice,
+      _maxPrice,
+    } = req.query;
+
+    const sortOption = { [_sort]: _order === "desc" ? 1 : -1 };
+    const options = {
+      page: _page,
+      limit: _limit,
+      sort: sortOption,
+      populate: "category",
+    };
+
+    const filters = {};
+
+    if (_keyword) {
+      filters[_search] = { $regex: _keyword, $options: "i" };
+    }
+    if (_minPrice || _maxPrice) {
+      const min = Number(_minPrice) || 0;
+      const max = Number(_maxPrice) || Infinity;
+
+      if (!filters[_sort]) filters[_sort] = {};
+
+      if (!isNaN(min)) filters[_sort].$gte = min;
+      if (!isNaN(max)) filters[_sort].$lte = max;
+    }
+
+    const getAllProducts = await Products.paginate(filters, options);
 
     if (getAllProducts == 0)
       return res.status(200).json({
