@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 interface Product {
+  _id: string;
   name: string;
   price: number;
   discountPrice: number;
@@ -75,6 +76,21 @@ const ProductManager = () => {
       pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
     }
     return pages;
+  };
+
+  const deleteProduct = async (_id: string) => {
+    const isCofirm = window.confirm("Bạn chắc chắn muốn xoá chứ");
+
+    if (!isCofirm) {
+      return;
+    }
+
+    try {
+      const { data } = await axios.delete(
+        `http://localhost:3000/api/coffee/${_id}`
+      );
+      setProducts(products.filter((p) => p._id != _id));
+    } catch (error) {}
   };
 
   return (
@@ -195,11 +211,14 @@ const ProductManager = () => {
                       {p.discountPrice.toLocaleString()}₫
                     </td>
                     <td className="border-gray-300 w-65 text-center">
-                      <button className="m-2 bg-red-600 px-3 py-1 rounded hover:bg-red-500 font-bold cursor-pointer">
+                      <button
+                        onClick={() => deleteProduct(p._id)}
+                        className="m-2 bg-red-600 px-3 py-1 rounded hover:bg-red-500 font-bold cursor-pointer"
+                      >
                         🗑️
                       </button>
                       <Link
-                        to=""
+                        to={`edit/${p._id}`}
                         className="m-2 bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-300 font-bold"
                       >
                         ✏️
