@@ -1,0 +1,344 @@
+{
+  "info": {
+    "name": "Shop Coffee API",
+    "_postman_id": "b5b8f2a3-d6a2-4f5f-ae52-bf7d8cddcb90",
+    "description": "Collection test toàn bộ API sản phẩm và danh mục (Shop Coffee).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "☕ PRODUCTS - Sản phẩm",
+      "item": [
+        {
+          "name": "Lấy danh sách tất cả sản phẩm",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/coffee",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee"]
+            }
+          }
+        },
+        {
+          "name": "Lấy chi tiết sản phẩm theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/coffee/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Thêm mới sản phẩm",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê sữa đá\",\n  \"price\": 35000,\n  \"discountPrice\": 30000,\n  \"images\": \"https://example.com/caphe-suada.jpg\",\n  \"description\": \"Cà phê sữa đá truyền thống Việt Nam\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/coffee",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật sản phẩm theo ID",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê đen đá\",\n  \"price\": 30000,\n  \"discountPrice\": 25000,\n  \"images\": \"https://example.com/caphe-den.jpg\",\n  \"description\": \"Cà phê đen đá nguyên chất\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/coffee/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Xoá sản phẩm theo ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/coffee/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "coffee", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📂 CATEGORIES - Danh mục",
+      "item": [
+        {
+          "name": "Lấy danh sách tất cả danh mục",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Lấy chi tiết danh mục theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories/{{categoryId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Thêm mới danh mục",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê truyền thống\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật danh mục theo ID",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cà phê đặc biệt\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/categories/{{categoryId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Xoá danh mục theo ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories/{{categoryId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 AUTH - Đăng ký / Đăng nhập",
+      "item": [
+        {
+          "name": "Đăng ký (Signup)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nguyen Van A\",\n  \"email\": \"user1@gmail.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/signup",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "Đăng nhập (Signin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user1@gmail.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/signin",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "signin"]
+            }
+          }
+        },
+        {
+          "name": "Thông tin người dùng (Profile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💬 COMMENTS - Bình luận sản phẩm",
+      "item": [
+        {
+          "name": "Lấy tất cả bình luận",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/comments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Lấy bình luận theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/comments/{{commentId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "comments", "{{commentId}}"]
+            }
+          }
+        },
+        {
+          "name": "Lấy bình luận theo sản phẩm",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/comments/product/{{productId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "comments", "product", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Thêm bình luận mới",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": \"6710ff3b9fa43e32c83edc41\",\n  \"product\": \"6710f58a22ad5d53a0db8f47b\",\n  \"title\": \"Cà phê rất ngon!\",\n  \"content\": \"Hương vị đậm đà, uống rất đã. Sẽ ủng hộ thêm!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/comments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật bình luận",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cà phê tuyệt vời!\",\n  \"content\": \"Mình đã thử loại Arabica, mùi rất thơm và nhẹ.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/comments/{{commentId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "comments", "{{commentId}}"]
+            }
+          }
+        },
+        {
+          "name": "Xóa bình luận theo ID",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "http://localhost:3000/api/comments/{{commentId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "comments", "{{commentId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "productId", "value": "670f58a22ad5d53a0db8f47b" },
+    { "key": "categoryId", "value": "6710f58a22ad5d53a0db8f47a" }
+  ]
+}
