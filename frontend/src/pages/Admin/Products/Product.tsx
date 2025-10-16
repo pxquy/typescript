@@ -243,7 +243,7 @@ const ProductManager = () => {
                         ✏️
                       </Link>
                       <Link
-                        to=""
+                        to={`/admin/productDetail/${p._id}`}
                         className="m-2 bg-blue-600 px-3 py-1 rounded hover:bg-blue-500 font-bold"
                       >
                         👁️

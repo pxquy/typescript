@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface Products {
+  _id: string;
   name: string;
   price: number;
   discountPrice: number;
@@ -35,7 +37,8 @@ const ListProduct = () => {
           </span>
         ) : (
           products.map((p, index) => (
-            <div
+            <Link
+              to={`productDetail/${p._id}`}
               key={index + 1}
               className="w-60 shadow-lg hover:scale-105 duration-200 ease-in-out cursor-pointer"
             >
@@ -63,7 +66,7 @@ const ListProduct = () => {
                   Thêm giỏ hàng
                 </button>
               </div>
-            </div>
+            </Link>
           ))
         )}
       </div>

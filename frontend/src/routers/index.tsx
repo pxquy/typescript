@@ -11,6 +11,7 @@ import AddProductPage from "../pages/Admin/Products/AddProduct";
 import Login from "../pages/Client/Login";
 import Register from "../pages/Client/Register";
 import EditProductPage from "../pages/Admin/Products/EditProduct";
+import ProductDetailManager from "../pages/Admin/Products/ProductDetail";
 
 function Routers() {
   return (
@@ -19,7 +20,7 @@ function Routers() {
         <Route path="/" element={<ClientLayout />}>
           <Route index element={<HomePage />} />
           <Route path="product" element={<ProductPage />} />
-          <Route path="productDetail" element={<ProductDetailPage />} />
+          <Route path="productDetail/:id" element={<ProductDetailPage />} />
           <Route path="about" element={<AboutPage />} />
 
           <Route path="login" element={<Login />} />
@@ -31,6 +32,7 @@ function Routers() {
           <Route path="product" element={<ProductManager />} />
           <Route path="addPage" element={<AddProductPage />} />
           <Route path="edit/:id" element={<EditProductPage />} />
+          <Route path="productDetail/:id" element={<ProductDetailManager />} />
         </Route>
       </Routes>
     </>
