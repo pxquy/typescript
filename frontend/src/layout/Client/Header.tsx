@@ -1,10 +1,16 @@
-import { Link } from "react-router-dom";
-// import logo from "./images/logoShop.jpg";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ListCategories from "../../components/ListCategories";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [active, setActive] = useState<string>("/");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    alert("Đã đăng xuất!");
+    navigate("/login");
+  };
   return (
     <header className="sticky top-0 z-50 bg-amber-100 shadow-md">
       <div className="flex items-center justify-evenly h-20 px-8">
@@ -61,6 +67,30 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+        <div>
+          <ul>
+            <li
+              onClick={() => setActive("about")}
+              className={`bg-yellow-200 pr-5 pl-5 pt-3 pb-3 rounded-sm hover:text-red-500 ${
+                active == "about" ? "bg-yellow-500" : "bg-yellow-200"
+              }`}
+            >
+              <Link
+                to="/login"
+                className="hover:text-brown-600 transition-colors duration-200"
+              >
+                Đăng nhập
+              </Link>
+            </li>
+          </ul>
+          <button
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            Đăng xuất
+          </button>
+        </div>
       </div>
     </header>
   );

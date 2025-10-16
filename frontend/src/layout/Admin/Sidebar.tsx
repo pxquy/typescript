@@ -60,10 +60,15 @@ const Sidebar = () => {
           </ul>
         </div>
 
-        <div className=" border-t mt-40 border-gray-300">
+        <div className="flex items-center border-t mt-40 border-gray-300">
           <div className="p-10 text-center">
-            <img src="" alt="Quý đẹp trai" />
+            <img
+              src="/images/muoicf.jpg"
+              alt="Quý đẹp trai"
+              className="w-10 h-10 rounded-full"
+            />
           </div>
+          <span>Quý đẹp trai</span>
         </div>
       </div>
     </>

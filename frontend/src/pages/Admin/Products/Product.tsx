@@ -79,19 +79,25 @@ const ProductManager = () => {
     return pages;
   };
 
-  const deleteProduct = async (_id: string) => {
-    const isCofirm = window.confirm("Bạn chắc chắn muốn xoá chứ");
+  const deleteProduct = async (id: string) => {
+    const isConfirm = window.confirm("Bạn chắc chắn muốn xoá chứ");
 
-    if (!isCofirm) {
+    if (!isConfirm) {
       return;
     }
-
+    console.log(id);
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/api/coffee/${_id}`
-      );
-      setProducts(products.filter((p) => p._id != _id));
-    } catch (error) {}
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3000/api/coffee/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Xoá thành công!");
+      setProducts(products.filter((p) => p._id != id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -204,11 +210,17 @@ const ProductManager = () => {
                       {(page - 1) * limit + index + 1}
                     </td>
                     <td className="border-gray-300 w-80 p-2 flex justify-between items-center">
-                      <img
-                        src={`/images/${p.images}`}
-                        alt={p.name}
-                        className="w-15 h-15 rounded"
-                      />
+                      {p.images ? (
+                        <img
+                          src={`/images/${p.images}`}
+                          alt={p.name}
+                          className="w-15 h-15 rounded"
+                        />
+                      ) : (
+                        <div className="w-15 h-15 flex items-center justify-center bg-gray-200 rounded text-gray-500">
+                          Không có ảnh
+                        </div>
+                      )}
                       <span className="font-bold text-gray-500">{p.name}</span>
                     </td>
                     <td className="border border-gray-300 w-65 text-center">
@@ -225,7 +237,7 @@ const ProductManager = () => {
                         🗑️
                       </button>
                       <Link
-                        to={`edit/${p._id}`}
+                        to={`/admin/edit/${p._id}`}
                         className="m-2 bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-300 font-bold"
                       >
                         ✏️

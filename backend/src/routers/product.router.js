@@ -14,11 +14,8 @@ const router = Router();
 router.get("/", getAllProducts);
 router.get("/:id", getById);
 
-router.use(verifyJWT);
-router.use(restrictTo("admin"));
-
-router.post("/", createProduct);
-router.put("/:id", updateProduct);
+router.post("/", verifyJWT, restrictTo("admin"), createProduct);
+router.put("/:id", verifyJWT, restrictTo("admin"), updateProduct);
 router.delete("/:id", deleteProduct);
 
 export default router;

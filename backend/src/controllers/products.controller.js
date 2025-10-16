@@ -117,7 +117,10 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const deleteProduct = await Products.findByIdAndDelete(req.params.id);
-
+    if (!deleteProduct)
+      return res.status(404).json({
+        message: "Không tìm thấy ID sản phẩm cần xoá",
+      });
     return res.status(201).json({
       success: true,
       message: "Sản phẩm đã xoá",
