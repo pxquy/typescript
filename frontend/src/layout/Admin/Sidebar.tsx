@@ -29,6 +29,14 @@ const Sidebar = () => {
               <Link to="product">Sản phẩm</Link>
             </li>
             <li
+              onClick={() => setActive("/category")}
+              className={`font-bold p-3 hover:bg-blue-200 w-45 rounded ${
+                active == "/category" ? "bg-blue-400" : ""
+              }`}
+            >
+              <Link to="category">Danh mục</Link>
+            </li>
+            <li
               onClick={() => setActive("/")}
               className={`font-bold p-3 hover:bg-blue-200 w-45 rounded ${
                 active == "/" ? "bg-blue-400" : ""

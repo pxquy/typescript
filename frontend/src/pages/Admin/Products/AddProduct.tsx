@@ -2,6 +2,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 interface Product {
   name: string;
@@ -31,8 +32,8 @@ const AddProductPage = () => {
           "http://localhost:3000/api/categories"
         );
         setCategories(data.data.docs || data.docs || []); // linh hoạt theo API của bạn
-      } catch (error) {
-        console.error("Lỗi khi lấy danh mục:", error);
+      } catch (error: any) {
+        toast.error("Lỗi khi lấy danh mục:", error);
       }
     };
     fetchCategories();
@@ -52,12 +53,14 @@ const AddProductPage = () => {
           },
         }
       );
-      alert("✅ " + data.message);
+      toast.success("✅ " + data.message);
       navigate("/admin/product");
       reset();
-    } catch (error: any) {
-      console.error("❌ Lỗi dữ liệu server:", error);
-      alert(error.response?.data?.message || "Lỗi dữ liệu phía server!");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("❌ Lỗi dữ liệu server:", error);
+        toast.error(error.response?.data.message || "Lỗi dữ liệu phía server!");
+      }
     } finally {
       setLoading(false);
     }

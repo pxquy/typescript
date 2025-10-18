@@ -72,13 +72,30 @@ export const getByIdProductComment = async (req, res) => {
 };
 export const createComment = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { title, content, product } = req.body;
 
-    const createComment = await Comments.create(req.body);
+    if (!title || !content || !product) {
+      return res.status(400).json({
+        message: "Thiếu thông tin bình luận hoặc sản phẩm",
+      });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Bạn chưa đăng nhập hoặc token không hợp lệ",
+      });
+    }
+
+    const comment = await Comments.create({
+      title,
+      content,
+      product,
+      user: req.user._id,
+    });
 
     return res.status(201).json({
-      message: "Thêm sản phẩm thành công!",
-      data: createComment,
+      message: "Thêm bình luận thành công!",
+      data: comment,
     });
   } catch (error) {
     return res.status(500).json({
@@ -87,6 +104,7 @@ export const createComment = async (req, res) => {
     });
   }
 };
+
 export const updateComment = async (req, res) => {
   try {
     const { name } = req.body;

@@ -3,23 +3,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
+import type { ICategory } from "../../../types/category";
 
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  discountPrice: number;
-  images: string;
-  description: string;
-}
-
-interface Category {
-  name: string;
-}
-
-const ProductManager = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+const CategoryManager = () => {
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [keyword, setKeyword] = useState<string>("");
@@ -33,11 +20,11 @@ const ProductManager = () => {
         let url = "";
 
         if (keyword.trim() === "" && !minPrice && !maxPrice) {
-          url = `http://localhost:3000/api/coffee?_page=${page}&_limit=${limit}`;
+          url = `http://localhost:3000/api/categories?_page=${page}&_limit=${limit}`;
         } else if (keyword && !minPrice && !maxPrice) {
-          url = `http://localhost:3000/api/coffee?_search=name&_keyword=${keyword}&_page=${page}&_limit=${limit}`;
+          url = `http://localhost:3000/api/categories?_search=name&_keyword=${keyword}&_page=${page}&_limit=${limit}`;
         } else if (minPrice || maxPrice || keyword) {
-          url = `http://localhost:3000/api/coffee?_search=name&_keyword=${
+          url = `http://localhost:3000/api/categories?_search=name&_keyword=${
             keyword || ""
           }&_sort=price&_minPrice=${minPrice || ""}&_maxPrice=${
             maxPrice || ""
@@ -45,26 +32,13 @@ const ProductManager = () => {
         }
 
         const { data } = await axios.get(url);
-        setProducts(data.data.docs);
+        setCategories(data.data.docs);
         setTotalPages(data.data.totalPages);
-      } catch (error: any) {
-        toast.error("Lỗi dữ liệu sản phẩm", error);
+      } catch (error) {
+        console.log("Lỗi dữ liệu sản phẩm", error);
       }
     })();
   }, [page, keyword, minPrice, maxPrice]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axios.get(
-          `http://localhost:3000/api/categories`
-        );
-        setCategories(data.data.docs);
-      } catch (error: any) {
-        toast.error("Lỗi dữ liệu danh mục", error);
-      }
-    })();
-  }, []);
 
   const generatePageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -89,13 +63,13 @@ const ProductManager = () => {
     console.log(id);
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/api/coffee/${id}`, {
+      await axios.delete(`http://localhost:3000/api/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       toast.success("Xoá thành công!");
-      setProducts(products.filter((p) => p._id != id));
+      setCategories(categories.filter((c) => c._id != id));
     } catch (error: any) {
       toast.error(error.response?.data.message);
     }
@@ -164,7 +138,7 @@ const ProductManager = () => {
             </button>
           </form>
           <Link
-            to="/admin/addPage"
+            to="/admin/addCategory"
             className="flex bg-blue-400 p-2 rounded-lg text-white hover:bg-blue-500 hover:font-bold"
           >
             <Plus /> Thêm mới
@@ -179,23 +153,21 @@ const ProductManager = () => {
                   <input type="checkbox" />
                 </th>
                 <th className="border border-gray-300 p-2">STT</th>
-                <th className="border border-gray-300 p-2 w-60">Hình ảnh</th>
                 <th className="border border-gray-300 p-2 w-60">
-                  Giá sản phẩm
+                  Tên danh mục
                 </th>
-                <th className="border border-gray-300 p-2 w-60">Giá giảm</th>
                 <th className="border border-gray-300 p-2 w-60">Hành động</th>
               </tr>
             </thead>
             <tbody>
-              {products.length === 0 ? (
+              {categories.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="p-4 text-gray-500">
                     Hiện tại không có sản phẩm nào!
                   </td>
                 </tr>
               ) : (
-                products.map((p, index) => (
+                categories.map((c, index) => (
                   <tr
                     key={index}
                     className={`border border-gray-300 ${
@@ -210,45 +182,29 @@ const ProductManager = () => {
                     <td className="border border-gray-300 w-10 text-center">
                       {(page - 1) * limit + index + 1}
                     </td>
-                    <td className="border-gray-300 w-80 p-2 flex justify-between items-center">
-                      {p.images ? (
-                        <img
-                          src={`/images/${p.images}`}
-                          alt={p.name}
-                          className="w-15 h-15 rounded"
-                        />
-                      ) : (
-                        <div className="w-15 h-15 flex items-center justify-center bg-gray-200 rounded text-gray-500">
-                          Không có ảnh
-                        </div>
-                      )}
-                      <span className="font-bold text-gray-500">{p.name}</span>
+                    <td className="border border-gray-300 w-10 text-center">
+                      {c.name}
                     </td>
-                    <td className="border border-gray-300 w-65 text-center">
-                      {p.price.toLocaleString()}₫
-                    </td>
-                    <td className="border border-gray-300 w-65 text-center">
-                      {p.discountPrice.toLocaleString()}₫
-                    </td>
+
                     <td className="border-gray-300 w-65 text-center">
                       <button
-                        onClick={() => deleteProduct(p._id)}
+                        onClick={() => deleteProduct(c._id)}
                         className="m-2 bg-red-600 px-3 py-1 rounded hover:bg-red-500 font-bold cursor-pointer"
                       >
                         🗑️
                       </button>
                       <Link
-                        to={`/admin/edit/${p._id}`}
+                        to={`/admin/editCategory/${c._id}`}
                         className="m-2 bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-300 font-bold"
                       >
                         ✏️
                       </Link>
-                      <Link
-                        to={`/admin/productDetail/${p._id}`}
+                      {/* <Link
+                        to={`/admin/productDetail/${c._id}`}
                         className="m-2 bg-blue-600 px-3 py-1 rounded hover:bg-blue-500 font-bold"
                       >
                         👁️
-                      </Link>
+                      </Link> */}
                     </td>
                   </tr>
                 ))
@@ -300,4 +256,4 @@ const ProductManager = () => {
   );
 };
 
-export default ProductManager;
+export default CategoryManager;

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signin, type createSignin } from "../../types/authValidate";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,7 +14,10 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<createSignin>({
+    resolver: zodResolver(signin),
+    mode: "onTouched",
+  });
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -20,7 +26,7 @@ export default function Login() {
     }
   }, []);
 
-  const onSubmit = async (data: {}) => {
+  const onSubmit = async (data: createSignin) => {
     try {
       const res = await axios.post(
         "http://localhost:3000/api/auth/signin",
@@ -28,14 +34,22 @@ export default function Login() {
       );
       if (res.data?.token) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.roles));
         setToken(res.data.token);
-        alert("Đăng nhập thành công!");
-        navigate("/admin");
+
+        if (res.data.roles == "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+        toast.success("Đăng nhập thành công!");
       } else {
-        alert("Đăng nhập thất bại, vui lòng kiểm tra lại!");
+        toast.error("Đăng nhập thất bại, vui lòng kiểm tra lại!");
       }
     } catch (error) {
-      alert(error || "Lỗi khi đăng nhập!");
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message || "Lỗi khi đăng nhập");
+      }
     }
   };
 
@@ -112,7 +126,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60 cursor-pointer"
           >
             {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>

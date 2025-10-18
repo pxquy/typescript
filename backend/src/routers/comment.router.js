@@ -16,13 +16,8 @@ router.get("/", getAllComments);
 router.get("/:id", getById);
 router.get("/product/:id", getByIdProductComment);
 
-router.use(verifyJWT);
-router.use(restrictTo("user"));
-router.post("/", createComment);
-router.put("/:id", updateComment);
-
-router.use(verifyJWT);
-router.use(restrictTo("user"));
-router.delete("/:id", deleteComment);
+router.post("/", verifyJWT, restrictTo("admin", "custom"), createComment);
+router.put("/:id", verifyJWT, restrictTo("admin", "custom"), updateComment);
+router.delete("/:id", verifyJWT, restrictTo("admin", "custom"), deleteComment);
 
 export default router;

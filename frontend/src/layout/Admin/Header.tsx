@@ -1,7 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <>
-      <div className="shadow-sm w-320 overflow-x h-20 flex justify-between">
+      <div className="shadow-sm w-320 overflow-x h-20 flex justify-around">
         <div className="font-bold mt-5 ml-20">Chào mừng quản trị viên!</div>
         <div className="mr-20 mt-5">
           <form className="flex gap-2">
@@ -14,6 +21,14 @@ const Header = () => {
               Tìm kiếm
             </button>
           </form>
+        </div>
+        <div className="text-center mt-4">
+          <button
+            onClick={() => handleLogout}
+            className="p-2 h-10 bg-blue-500 rounded-2xl hover:text-white cursor-pointer"
+          >
+            Đăng xuất
+          </button>
         </div>
       </div>
     </>

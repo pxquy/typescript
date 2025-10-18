@@ -2,6 +2,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 interface Product {
   name: string;
@@ -30,8 +31,8 @@ const EditProductPage = () => {
           "http://localhost:3000/api/categories"
         );
         setCategories(data.data.docs);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh mục:", error);
+      } catch (error: any) {
+        toast.error("Lỗi khi lấy danh mục:", error);
       }
     };
     fetchCategories();
@@ -44,8 +45,8 @@ const EditProductPage = () => {
           `http://localhost:3000/api/coffee/${id}`
         );
         reset(data.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy sản phẩm:", error);
+      } catch (error: any) {
+        toast.error("Lỗi khi lấy sản phẩm:", error);
       }
     };
     if (id) fetchProduct();
@@ -61,16 +62,15 @@ const EditProductPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert(data.message || "Cập nhật thành công!");
+      toast.success(data.message || "Cập nhật thành công!");
       navigate("/admin/product");
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Lỗi dữ liệu server:",
-          error.response?.data || error.message
+        toast.error(
+          `Lỗi dữ liệu server: ${error.response?.data.message || error.message}`
         );
       } else {
-        console.error("Lỗi không xác định:", error);
+        alert(`Lỗi: ${error.message}`);
       }
     }
   };

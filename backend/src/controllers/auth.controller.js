@@ -51,12 +51,13 @@ export const signin = async (req, res) => {
     const token = await jwt.sign(
       { _id: user._id, roles: user.roles },
       process.env.SECRET_KEY,
-      { expiresIn: "5m" }
+      { expiresIn: "1h" }
     );
 
     return res.status(200).json({
       message: "Đăng nhập thành công",
       token: token,
+      user: user,
     });
   } catch (error) {
     return res.status(500).json({

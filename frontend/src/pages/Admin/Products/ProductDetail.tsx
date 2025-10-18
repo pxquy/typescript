@@ -1,40 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  discountPrice: number;
-  description: string;
-  images: string;
-  category: {
-    _id: string;
-    name: string;
-  };
-}
-
-interface Comment {
-  _id: string;
-  title: string;
-  content: string;
-  user: {
-    _id: string;
-    name: string;
-  };
-  createdAt: string;
-}
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import type { IProduct } from "../../../types/products";
+import type { IComment } from "../../../types/comment";
 
 const ProductDetailManager = () => {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState({
-    title: "",
-    content: "",
-  });
+  const [product, setProduct] = useState<IProduct | null>(null);
+  const [comments, setComments] = useState<IComment[]>([]);
+  const [newComment, setNewComment] = useState({ title: "", content: "" });
+  const [editingComment, setEditingComment] = useState<IComment | null>(null);
+  const token = localStorage.getItem("token");
+  const roles = JSON.parse(localStorage.getItem("roles") || "[]");
 
+  // Lấy sản phẩm
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -42,13 +23,14 @@ const ProductDetailManager = () => {
           `http://localhost:3000/api/coffee/${id}`
         );
         setProduct(data.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy sản phẩm:", error);
+      } catch {
+        toast.error("Lỗi khi lấy sản phẩm");
       }
     };
     fetchProduct();
   }, [id]);
 
+  // Lấy bình luận
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -56,26 +38,89 @@ const ProductDetailManager = () => {
           `http://localhost:3000/api/comments?product=${id}`
         );
         setComments(data.data.docs);
-      } catch (error) {
-        console.error("Lỗi khi lấy bình luận:", error);
+      } catch {
+        toast.error("Lỗi khi lấy bình luận");
       }
     };
     fetchComments();
   }, [id]);
 
+  // Thêm bình luận
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!newComment.title || !newComment.content) {
+      toast.warn("Vui lòng nhập đầy đủ tiêu đề và nội dung!");
+      return;
+    }
+
     try {
-      const { data } = await axios.post("http://localhost:3000/api/comments", {
-        ...newComment,
-        product: id,
-        user: "671f8206c139c0eab4c4c4ab",
-      });
-      alert(data.message);
+      const { data } = await axios.post(
+        "http://localhost:3000/api/comments",
+        { ...newComment, product: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Đã thêm bình luận!");
       setNewComment({ title: "", content: "" });
       setComments((prev) => [data.data, ...prev]);
-    } catch (error) {
-      console.error("Lỗi khi thêm bình luận:", error);
+    } catch {
+      toast.error("Không thể thêm bình luận!");
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa bình luận này?");
+    if (!confirm) return;
+
+    try {
+      await axios.delete(`http://localhost:3000/api/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setComments(comments.filter((c) => c._id !== commentId));
+      toast.success("Đã xóa bình luận!");
+    } catch {
+      toast.error("Lỗi khi xóa bình luận!");
+    }
+  };
+
+  const handleEditComment = (comment: IComment) => {
+    setEditingComment(comment);
+    setNewComment({ title: comment.title, content: comment.content });
+  };
+
+  const handleUpdateComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingComment) return;
+
+    const confirm = window.confirm("Xác nhận cập nhật bình luận?");
+    if (!confirm) return;
+
+    try {
+      const { data } = await axios.put(
+        `http://localhost:3000/api/comments/${editingComment._id}`,
+        newComment,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setComments((prev) =>
+        prev.map((c) =>
+          c._id === editingComment._id ? { ...c, ...data.data } : c
+        )
+      );
+      setEditingComment(null);
+      setNewComment({ title: "", content: "" });
+      toast.success("Đã cập nhật bình luận!");
+    } catch {
+      toast.error("Không thể cập nhật bình luận!");
     }
   };
 
@@ -88,6 +133,8 @@ const ProductDetailManager = () => {
 
   return (
     <div className="p-10 space-y-10">
+      <ToastContainer position="top-right" />
+
       <div className="bg-white shadow-lg rounded-xl p-6 flex gap-8">
         <img
           src={`/images/${product.images}`}
@@ -111,10 +158,16 @@ const ProductDetailManager = () => {
         </div>
       </div>
 
+      {/* Khu vực bình luận */}
       <div className="bg-white shadow-lg rounded-xl p-6">
-        <h3 className="text-xl font-semibold mb-4">Bình luận sản phẩm</h3>
+        <h3 className="text-xl font-semibold mb-4">
+          {editingComment ? "✏️ Chỉnh sửa bình luận" : "💬 Thêm bình luận mới"}
+        </h3>
 
-        <form onSubmit={handleAddComment} className="space-y-4 mb-6">
+        <form
+          onSubmit={editingComment ? handleUpdateComment : handleAddComment}
+          className="space-y-4 mb-6"
+        >
           <input
             type="text"
             placeholder="Tiêu đề bình luận"
@@ -133,12 +186,26 @@ const ProductDetailManager = () => {
             className="w-full border rounded-lg p-2 shadow-inner"
             rows={3}
           />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-          >
-            Thêm bình luận
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            >
+              {editingComment ? "✅ Xác nhận cập nhật" : "➕ Thêm bình luận"}
+            </button>
+            {editingComment && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingComment(null);
+                  setNewComment({ title: "", content: "" });
+                }}
+                className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500"
+              >
+                ❌ Hủy
+              </button>
+            )}
+          </div>
         </form>
 
         {comments.length > 0 ? (
@@ -148,12 +215,30 @@ const ProductDetailManager = () => {
                 key={cmt._id}
                 className="border rounded-lg p-4 shadow-sm hover:bg-gray-50"
               >
-                <h4 className="font-semibold text-gray-800">{cmt.title}</h4>
-                <p className="text-gray-600 mt-1">{cmt.content}</p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Bởi {cmt.user?.name || "Ẩn danh"} •{" "}
-                  {new Date(cmt.createdAt).toLocaleString()}
-                </p>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-semibold text-gray-800">{cmt.title}</h4>
+                    <p className="text-gray-600 mt-1">{cmt.content}</p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      Bởi {cmt.user?.name || "Ẩn danh"} •{" "}
+                      {new Date(cmt.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditComment(cmt)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      ✏️ Sửa
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(cmt._id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      🗑 Xóa
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

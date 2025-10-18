@@ -1,13 +1,18 @@
 import Categories from "../models/categories.model";
 
 export const getAllCategories = async (req, res) => {
-  const { _page = 1, _limit = 5 } = req.query;
+  const { _page = 1, _limit = 5, _search = "name", _keyword = "" } = req.query;
   const options = {
     page: _page,
     limit: _limit,
   };
+  const filters = {};
+
+  if (_keyword) {
+    filters[_search] = { $regex: _keyword, $options: "i" };
+  }
   try {
-    const getAllCategories = await Categories.paginate({}, options);
+    const getAllCategories = await Categories.paginate(filters, options);
 
     if (getAllCategories.length == 0)
       return res.status(200).json({

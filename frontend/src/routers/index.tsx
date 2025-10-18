@@ -12,6 +12,9 @@ import Login from "../pages/Client/Login";
 import Register from "../pages/Client/Register";
 import EditProductPage from "../pages/Admin/Products/EditProduct";
 import ProductDetailManager from "../pages/Admin/Products/ProductDetail";
+import CategoryManager from "../pages/Admin/Categories/Catgories";
+import AddCategoryPage from "../pages/Admin/Categories/AddCategory";
+import EditCategoryPage from "../pages/Admin/Categories/EditCategory";
 
 function Routers() {
   return (
@@ -33,6 +36,10 @@ function Routers() {
           <Route path="addPage" element={<AddProductPage />} />
           <Route path="edit/:id" element={<EditProductPage />} />
           <Route path="productDetail/:id" element={<ProductDetailManager />} />
+
+          <Route path="category" element={<CategoryManager />} />
+          <Route path="addCategory" element={<AddCategoryPage />} />
+          <Route path="editCategory/:id" element={<EditCategoryPage />} />
         </Route>
       </Routes>
     </>

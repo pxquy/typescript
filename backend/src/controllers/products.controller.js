@@ -1,3 +1,4 @@
+import Categories from "../models/categories.model";
 import Products from "../models/products.model";
 
 export const getAllProducts = async (req, res) => {
@@ -70,6 +71,30 @@ export const getById = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Lỗi dữ liệu",
+      error: error.message,
+    });
+  }
+};
+
+export const productByCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const getProductByCategory = await Products.find({
+      category: categoryId,
+    }).populate("category");
+
+    if (!getProductByCategory || getProductByCategory.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy sản phẩm nào trong danh mục này",
+      });
+    }
+    return res.status(200).json({
+      message: "Sản phẩm theo danh mục",
+      data: getProductByCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi dữ liệu server",
       error: error.message,
     });
   }
