@@ -78,7 +78,7 @@ const CategoryManager = () => {
   return (
     <>
       <div className="mt-15 ml-10">
-        <div className="mb-10 z-10 flex items-center justify-content-center gap-10">
+        <div className="mb-10 z-10 flex items-center justify-between gap-10">
           <form
             className="flex gap-20"
             onSubmit={(e) => {
@@ -86,60 +86,17 @@ const CategoryManager = () => {
               setPage(1);
             }}
           >
-            <select className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer">
-              <option value="" hidden>
-                Chọn danh mục
-              </option>
-              {categories.length > 0 ? (
-                categories.map((c, index) => (
-                  <option key={index} value={c.name}>
-                    {c.name}
-                  </option>
-                ))
-              ) : (
-                <option disabled>Không có danh mục nào</option>
-              )}
-            </select>
-
-            <select
-              className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer"
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "1") {
-                  setMinPrice("20000");
-                  setMaxPrice("50000");
-                } else if (value === "2") {
-                  setMinPrice("50000");
-                  setMaxPrice("100000");
-                } else {
-                  setMinPrice("");
-                  setMaxPrice("");
-                }
-                setPage(1);
-              }}
-            >
-              <option value="">Chọn khoảng giá</option>
-              <option value="1">20.000 - 50.000</option>
-              <option value="2">50.000 - 100.000</option>
-            </select>
-
             <input
               type="text"
               placeholder="Tìm kiếm sản phẩm..."
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              className="shadow-inner bg-gray-200 w-70 rounded-lg placeholder:p-2 focus:outline-none px-2"
+              className="shadow-inner bg-gray-200 w-70 rounded-lg placeholder:p-2 focus:outline-none px-2 p-2"
             />
-            <button
-              type="submit"
-              className="bg-blue-400 w-20 rounded-lg font-bold text-white cursor-pointer hover:bg-blue-500"
-            >
-              Lọc
-            </button>
           </form>
           <Link
             to="/admin/addCategory"
-            className="flex bg-blue-400 p-2 rounded-lg text-white hover:bg-blue-500 hover:font-bold"
+            className="flex bg-blue-400 p-2 mr-10 rounded-lg text-white hover:bg-blue-500 hover:font-bold"
           >
             <Plus /> Thêm mới
           </Link>

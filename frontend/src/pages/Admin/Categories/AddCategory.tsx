@@ -10,7 +10,6 @@ const AddCategoryPage = () => {
   const { register, handleSubmit, reset } = useForm<ICategory>();
   const [loading, setLoading] = useState(false);
 
-  // 🧩 Gửi dữ liệu sản phẩm
   const onSubmit = async (values: ICategory) => {
     setLoading(true);
     try {

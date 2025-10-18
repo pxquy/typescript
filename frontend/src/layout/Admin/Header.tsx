@@ -24,7 +24,7 @@ const Header = () => {
         </div>
         <div className="text-center mt-4">
           <button
-            onClick={() => handleLogout}
+            onClick={() => handleLogout()}
             className="p-2 h-10 bg-blue-500 rounded-2xl hover:text-white cursor-pointer"
           >
             Đăng xuất

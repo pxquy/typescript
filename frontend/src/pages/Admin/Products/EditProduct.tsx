@@ -3,26 +3,26 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
-interface Product {
-  name: string;
-  price: number;
-  discountPrice: number;
-  images: string;
-  category: string;
-  description: string;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-}
+import type { IProduct } from "../../../types/products";
+import type { ICategory } from "../../../types/category";
+import {
+  addAndEdit,
+  type createAddAndEdit,
+} from "../../../types/addAndEditValidateProduct";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const EditProductPage = () => {
-  const { id } = useParams(); // lấy id từ URL
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { register, handleSubmit, reset } = useForm<Product>();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<createAddAndEdit>({
+    resolver: zodResolver(addAndEdit),
+  });
+  const [categories, setCategories] = useState<ICategory[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,7 +52,7 @@ const EditProductPage = () => {
     if (id) fetchProduct();
   }, [id, reset]);
 
-  const onSubmit = async (values: Product) => {
+  const onSubmit = async (values: createAddAndEdit) => {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.put(
@@ -88,6 +88,13 @@ const EditProductPage = () => {
               type="text"
               className="border rounded p-2"
             />
+            {errors.name && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.name.message === "string"
+                  ? errors.name.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col w-[48%]">
@@ -97,6 +104,13 @@ const EditProductPage = () => {
               type="number"
               className="border rounded p-2"
             />
+            {errors.price && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.price.message === "string"
+                  ? errors.price.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col w-[48%]">
@@ -106,6 +120,13 @@ const EditProductPage = () => {
               type="number"
               className="border rounded p-2"
             />
+            {errors.discountPrice && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.discountPrice.message === "string"
+                  ? errors.discountPrice.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col w-[48%]">
@@ -115,6 +136,13 @@ const EditProductPage = () => {
               type="text"
               className="border rounded p-2"
             />
+            {errors.images && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.images.message === "string"
+                  ? errors.images.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col w-full">
@@ -130,6 +158,13 @@ const EditProductPage = () => {
                 </option>
               ))}
             </select>
+            {errors.category && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.category.message === "string"
+                  ? errors.category.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col w-full">
@@ -139,6 +174,13 @@ const EditProductPage = () => {
               rows={4}
               className="border rounded p-2"
             ></textarea>
+            {errors.description && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.description.message === "string"
+                  ? errors.description.message
+                  : ""}
+              </p>
+            )}
           </div>
         </div>
 

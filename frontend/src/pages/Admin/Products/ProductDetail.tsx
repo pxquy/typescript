@@ -13,9 +13,8 @@ const ProductDetailManager = () => {
   const [newComment, setNewComment] = useState({ title: "", content: "" });
   const [editingComment, setEditingComment] = useState<IComment | null>(null);
   const token = localStorage.getItem("token");
-  const roles = JSON.parse(localStorage.getItem("roles") || "[]");
+  const userData = localStorage.getItem("user");
 
-  // Lấy sản phẩm
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -30,7 +29,6 @@ const ProductDetailManager = () => {
     fetchProduct();
   }, [id]);
 
-  // Lấy bình luận
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -45,7 +43,6 @@ const ProductDetailManager = () => {
     fetchComments();
   }, [id]);
 
-  // Thêm bình luận
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -84,7 +81,7 @@ const ProductDetailManager = () => {
       });
       setComments(comments.filter((c) => c._id !== commentId));
       toast.success("Đã xóa bình luận!");
-    } catch {
+    } catch (error) {
       toast.error("Lỗi khi xóa bình luận!");
     }
   };
@@ -158,7 +155,6 @@ const ProductDetailManager = () => {
         </div>
       </div>
 
-      {/* Khu vực bình luận */}
       <div className="bg-white shadow-lg rounded-xl p-6">
         <h3 className="text-xl font-semibold mb-4">
           {editingComment ? "✏️ Chỉnh sửa bình luận" : "💬 Thêm bình luận mới"}

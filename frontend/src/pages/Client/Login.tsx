@@ -34,10 +34,9 @@ export default function Login() {
       );
       if (res.data?.token) {
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.roles));
+        localStorage.setItem("user", JSON.stringify(res.data.user.roles));
         setToken(res.data.token);
-
-        if (res.data.roles == "admin") {
+        if (res.data.user.roles == "admin") {
           navigate("/admin");
         } else {
           navigate("/");

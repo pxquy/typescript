@@ -3,35 +3,34 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
-interface Product {
-  name: string;
-  price: number;
-  discountPrice: number;
-  images: string;
-  category: string;
-  description: string;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-}
+import {
+  addAndEdit,
+  type createAddAndEdit,
+} from "../../../types/addAndEditValidateProduct";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { ICategory } from "../../../types/category";
 
 const AddProductPage = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, reset } = useForm<Product>();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<createAddAndEdit>({
+    resolver: zodResolver(addAndEdit),
+    mode: "onTouched",
+  });
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 🧩 Lấy danh mục từ backend
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const { data } = await axios.get(
           "http://localhost:3000/api/categories"
         );
-        setCategories(data.data.docs || data.docs || []); // linh hoạt theo API của bạn
+        setCategories(data.data.docs || data.docs || []);
       } catch (error: any) {
         toast.error("Lỗi khi lấy danh mục:", error);
       }
@@ -39,8 +38,7 @@ const AddProductPage = () => {
     fetchCategories();
   }, []);
 
-  // 🧩 Gửi dữ liệu sản phẩm
-  const onSubmit = async (values: Product) => {
+  const onSubmit = async (values: createAddAndEdit) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
@@ -82,6 +80,13 @@ const AddProductPage = () => {
               placeholder="Nhập tên sản phẩm"
               className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
+            {errors.name && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.name.message === "string"
+                  ? errors.name.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div>
@@ -92,6 +97,13 @@ const AddProductPage = () => {
               placeholder="VD: 45000"
               className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
+            {errors.price && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.price.message === "number"
+                  ? errors.price.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div>
@@ -102,6 +114,13 @@ const AddProductPage = () => {
               placeholder="VD: 39000"
               className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
+            {errors.discountPrice && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.discountPrice.message === "number"
+                  ? errors.discountPrice.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div>
@@ -114,6 +133,13 @@ const AddProductPage = () => {
               placeholder="Dán link ảnh sản phẩm"
               className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
+            {errors.images && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.images.message === "string"
+                  ? errors.images.message
+                  : ""}
+              </p>
+            )}
           </div>
 
           <div>
@@ -129,6 +155,13 @@ const AddProductPage = () => {
                 </option>
               ))}
             </select>
+            {errors.category && (
+              <p className="text-red-600 text-sm mt-1">
+                {typeof errors.category.message === "string"
+                  ? errors.category.message
+                  : ""}
+              </p>
+            )}
           </div>
         </div>
 
@@ -141,6 +174,13 @@ const AddProductPage = () => {
             rows={4}
             className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           ></textarea>
+          {errors.description && (
+            <p className="text-red-600 text-sm mt-1">
+              {typeof errors.description.message === "string"
+                ? errors.description.message
+                : ""}
+            </p>
+          )}
         </div>
 
         <div className="text-center">

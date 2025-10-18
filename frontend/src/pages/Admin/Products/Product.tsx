@@ -14,6 +14,7 @@ interface Product {
 }
 
 interface Category {
+  _id: string;
   name: string;
 }
 
@@ -25,7 +26,8 @@ const ProductManager = () => {
   const [keyword, setKeyword] = useState<string>("");
   const [minPrice, setMinPrice] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<string>("");
-  const limit = 1;
+  const [categoryId, setCategoryId] = useState<string>("");
+  const limit = 2;
 
   useEffect(() => {
     (async () => {
@@ -42,6 +44,8 @@ const ProductManager = () => {
           }&_sort=price&_minPrice=${minPrice || ""}&_maxPrice=${
             maxPrice || ""
           }&_page=${page}&_limit=${limit}`;
+        } else if (categoryId) {
+          url = `http://localhost:3000/api/coffee/category/${categoryId}&_page=${page}&_limit=${limit}`;
         }
 
         const { data } = await axios.get(url);
@@ -51,7 +55,7 @@ const ProductManager = () => {
         toast.error("Lỗi dữ liệu sản phẩm", error);
       }
     })();
-  }, [page, keyword, minPrice, maxPrice]);
+  }, [page, keyword, minPrice, maxPrice, categoryId]);
 
   useEffect(() => {
     (async () => {
@@ -112,13 +116,19 @@ const ProductManager = () => {
               setPage(1);
             }}
           >
-            <select className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer">
+            <select
+              onChange={(e) => {
+                setCategoryId(e.target.value);
+                setPage(1);
+              }}
+              className="border rounded-lg border-gray-400 p-2 pl-5 pr-5 font-bold cursor-pointer"
+            >
               <option value="" hidden>
                 Chọn danh mục
               </option>
               {categories.length > 0 ? (
                 categories.map((c, index) => (
-                  <option key={index} value={c.name}>
+                  <option key={index} value={c._id}>
                     {c.name}
                   </option>
                 ))
